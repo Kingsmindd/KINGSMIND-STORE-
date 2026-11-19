@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+:root {
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: #17352a;
+  background: #f6f5ef;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+:focus-visible {
+  outline: 3px solid #688746;
+  outline-offset: 4px;
+}
+
+#navbar-search-input {
+  appearance: none;
+  border: 0;
+  outline: none;
+  box-shadow: none;
+}
+
+#navbar-search-input::-webkit-search-decoration,
+#navbar-search-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+.page-content {
+  animation: page-appear 180ms ease-out both;
+}
+
+@keyframes page-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-content {
+    animation: none;
+  }
+}
