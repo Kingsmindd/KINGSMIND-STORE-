@@ -78,7 +78,7 @@ export function createSupportChatController(pool: Pool) {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
           sameSite: "lax",
-          path: "/support",
+          path: process.env.NODE_ENV === "production" ? "/api/support" : "/",
           maxAge: 30 * 24 * 60 * 60 * 1000,
         });
 

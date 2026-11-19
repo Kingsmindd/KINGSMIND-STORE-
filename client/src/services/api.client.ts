@@ -1,4 +1,4 @@
-import { API_URL } from "../config/api";
+import { resolveApiUrl } from "../config/api";
 
 export class ApiError extends Error {
   status: number;
@@ -28,7 +28,7 @@ export async function apiRequest<T>(
     headers.set("X-CSRF-Token", result.csrfToken);
   }
 
-  const response = await fetch(new URL(path, API_URL), {
+  const response = await fetch(resolveApiUrl(path), {
     ...options,
     method,
     headers,

@@ -1,4 +1,4 @@
-import { API_URL } from "../config/api";
+import { resolveApiUrl } from "../config/api";
 import type {
   ProductListResponse,
   ProductDetails,
@@ -12,7 +12,7 @@ export async function getProducts(
   signal?: AbortSignal,
   search = "",
 ): Promise<ProductListResponse> {
-  const url = new URL("/products", API_URL);
+  const url = resolveApiUrl("/products");
   url.searchParams.set("page", String(page));
 
   if (search.trim()) {
@@ -35,7 +35,7 @@ export async function getProductDetails(
   signal?: AbortSignal,
 ): Promise<ProductDetails> {
   const response = await fetch(
-    new URL(`/products/${encodeURIComponent(productId)}`, API_URL),
+    resolveApiUrl(`/products/${encodeURIComponent(productId)}`),
     { signal },
   );
 

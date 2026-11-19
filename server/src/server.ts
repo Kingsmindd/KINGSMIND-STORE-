@@ -9,15 +9,25 @@ import { createSessionMiddleware } from "./config/session.js";
 import { createOrderRouter } from "./routes/order.routes.js";
 import { createProductRouter } from "./routes/products.routes.js";
 import { createAdminCustomerRouter } from "./routes/admin-customer.routes.js";
-import { productImageDirectory } from "./services/product-image-storage.service.js";
+import {
+  productImageDirectory,
+  getProductImageUrl,
+} from "./services/product-image-storage.service.js";
 import { frontendOrigin } from "./config/env.js";
 import cors from "cors";
 import { createOrderDraftRouter } from "./routes/order-draft.routes.js";
 import { createSupportChatRouter } from "./routes/support-chat.routes.js";
 import { startSupportEmailWorker } from "./services/support-email-worker.js";
+import path from "node:path";
 
 const app = express();
+
+const api = express.Router();
 const isProduction = process.env.NODE_ENV === "production";
+
+if (isProduction) {
+  app.set("trust proxy", 1);
+}
 
 app.disable("x-powered-by");
 
@@ -27,6 +37,7 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         "upgrade-insecure-requests": isProduction ? [] : null,
+        "img-src": ["'self'", "data:", "https://res.cloudinary.com"],
       },
     },
   }),
@@ -49,7 +60,8 @@ app.use(
 );
 
 const pool = new Pool({
-  connectionTimeoutMillis: 5000,
+  connectionString: process.env.DATABASE_URL,
+  connectionTimeoutMillis: 10000,
 });
 
 pool.on("error", (error) => {
@@ -70,20 +82,30 @@ app.use(
   }),
 );
 
-app.use("/auth", createAuthRouter(pool));
+app.get("/uploads/products/:imageKey", (req, res) => {
+  const imageUrl = getProductImageUrl(req.params.imageKey);
 
-app.use("/checkout", createCheckoutRouter(pool));
+  if (!imageUrl) {
+    res.status(404).json({ error: "Product image not found." });
+    return;
+  }
 
-app.use("/orders/draft", createOrderDraftRouter(pool));
-app.use("/orders", createOrderRouter(pool));
+  res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+  res.redirect(302, imageUrl);
+});
 
-app.use("/orders", createOrderRouter(pool));
+api.use("/auth", createAuthRouter(pool));
 
-app.use("/admin/customers", createAdminCustomerRouter(pool));
+api.use("/checkout", createCheckoutRouter(pool));
 
-app.use("/products", createProductRouter(pool));
+api.use("/orders/draft", createOrderDraftRouter(pool));
+api.use("/orders", createOrderRouter(pool));
 
-app.get("/", async (_req, res) => {
+api.use("/admin/customers", createAdminCustomerRouter(pool));
+
+api.use("/products", createProductRouter(pool));
+
+api.get("/", async (_req, res) => {
   try {
     const result = await pool.query("SELECT NOW() AS time");
 
@@ -97,7 +119,7 @@ app.get("/", async (_req, res) => {
   }
 });
 
-app.get("/health/database", async (_req, res) => {
+api.get("/health/database", async (_req, res) => {
   try {
     await pool.query(
       "SELECT id, name, email, password_hash, role, created_at FROM users LIMIT 0",
@@ -113,7 +135,43 @@ app.get("/health/database", async (_req, res) => {
   }
 });
 
-app.use("/support", createSupportChatRouter(pool));
+api.use("/support", createSupportChatRouter(pool));
+
+api.use((_req, res) => {
+  res.status(404).json({
+    error: "API route not found.",
+  });
+});
+
+app.use("/api", api);
+
+if (!isProduction) {
+  app.use("/", api);
+}
+
+if (isProduction) {
+  const frontendDirectory = path.resolve(__dirname, "../../client/dist");
+
+  app.use(
+    express.static(frontendDirectory, {
+      index: false,
+      maxAge: "1h",
+    }),
+  );
+
+  app.get("/{*page}", (req, res, next) => {
+    if (req.path.startsWith("/uploads/") || path.extname(req.path)) {
+      next();
+      return;
+    }
+
+    res.sendFile(path.join(frontendDirectory, "index.html"), {
+      headers: {
+        "Cache-Control": "no-store",
+      },
+    });
+  });
+}
 
 app.use((_req, res) => {
   res.status(404).json({
