@@ -95,9 +95,11 @@ export default function ProductCard({ product }: ProductCardProps) {
       </p>
 
       <div className="mt-auto flex items-center justify-between gap-3 pt-5">
-      <p className="font-bold tabular-nums">
-        <span className="mr-1 text-sm font-normal text-stone-500">From</span>
-        {formatMoney(product.from_price_minor, product.currency)}
+      <p className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+        <span className="text-xs font-semibold tracking-wide text-stone-500">Price</span>
+        <span className="text-xl font-bold tracking-tight text-[#17352a] tabular-nums">
+          {formatMoney(product.from_price_minor, product.currency)}
+        </span>
       </p>
       <span aria-hidden="true" className="grid size-9 shrink-0 place-items-center rounded-full border border-stone-200 text-lg text-[#17352a] group-hover:border-[#688746] group-hover:bg-[#edf0e7]">↗</span>
       </div>

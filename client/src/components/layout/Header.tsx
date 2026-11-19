@@ -109,7 +109,12 @@ export default function Header() {
     }
   }
 
-  const sidebarButtonClass = user
+  const customerMobileButtonClass =
+    "max-lg:flex max-lg:min-h-14 max-lg:w-full max-lg:items-center max-lg:rounded-xl max-lg:border max-lg:border-[#cddbc7] max-lg:bg-[#f1f5ed] max-lg:px-4 max-lg:py-3.5 max-lg:text-left max-lg:text-base max-lg:font-semibold max-lg:tracking-tight max-lg:text-[#17352a] max-lg:shadow-sm max-lg:transition-colors max-lg:hover:border-[#688746] max-lg:hover:bg-[#e3ecd9] max-lg:focus-visible:outline-2 max-lg:focus-visible:outline-offset-2 max-lg:focus-visible:outline-[#17352a]";
+
+  const sidebarButtonClass = user?.role === "customer"
+    ? `${customerMobileButtonClass} lg:block lg:w-full lg:rounded-lg lg:border lg:border-white/15 lg:bg-white/10 lg:px-3.5 lg:py-2.5 lg:text-left lg:text-white lg:transition-colors lg:hover:border-white/30 lg:hover:bg-white/20 lg:focus-visible:outline-2 lg:focus-visible:outline-offset-2 lg:focus-visible:outline-white`
+    : user
     ? "max-lg:flex max-lg:min-h-12 max-lg:w-full max-lg:items-center max-lg:rounded-xl max-lg:border max-lg:border-stone-200 max-lg:bg-white max-lg:px-4 max-lg:py-3 max-lg:text-left max-lg:text-base max-lg:font-semibold max-lg:text-[#17352a] max-lg:transition-colors max-lg:hover:border-[#688746] max-lg:hover:bg-[#f1f5ed] lg:block lg:w-full lg:rounded-lg lg:border lg:border-white/15 lg:bg-white/10 lg:px-3.5 lg:py-2.5 lg:text-left lg:text-white lg:transition-colors lg:hover:border-white/30 lg:hover:bg-white/20 lg:focus-visible:outline-2 lg:focus-visible:outline-offset-2 lg:focus-visible:outline-white"
     : "max-lg:min-h-12 max-lg:justify-start max-lg:rounded-xl max-lg:py-3 max-lg:text-base inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-md border border-[#17352a]/25 bg-white px-4 font-semibold text-[#17352a] transition-colors hover:border-[#17352a] hover:bg-[#f1f5ed] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#17352a]";
 

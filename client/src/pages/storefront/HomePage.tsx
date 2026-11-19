@@ -221,9 +221,9 @@ export default function HomePage() {
             className="mb-4 min-h-6 text-sm text-stone-500"
           >
             {loading
-              ? products.length > 0
-                ? "Updating results…"
-                : "Searching the collection…"
+              ? search.trim()
+                ? "Searching the collection…"
+                : "Loading the collection…"
               : ""}
           </p>
 
