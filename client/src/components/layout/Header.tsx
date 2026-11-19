@@ -110,11 +110,11 @@ export default function Header() {
   }
 
   const sidebarButtonClass = user
-    ? "lg:block lg:w-full lg:rounded-lg lg:border lg:border-white/15 lg:bg-white/10 lg:px-3.5 lg:py-2.5 lg:text-left lg:text-white lg:transition-colors lg:hover:border-white/30 lg:hover:bg-white/20 lg:focus-visible:outline-2 lg:focus-visible:outline-offset-2 lg:focus-visible:outline-white"
-    : "inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-md border border-[#17352a]/25 bg-white px-4 font-semibold text-[#17352a] transition-colors hover:border-[#17352a] hover:bg-[#f1f5ed] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#17352a]";
+    ? "max-lg:flex max-lg:min-h-12 max-lg:w-full max-lg:items-center max-lg:rounded-xl max-lg:border max-lg:border-stone-200 max-lg:bg-white max-lg:px-4 max-lg:py-3 max-lg:text-left max-lg:text-base max-lg:font-semibold max-lg:text-[#17352a] max-lg:transition-colors max-lg:hover:border-[#688746] max-lg:hover:bg-[#f1f5ed] lg:block lg:w-full lg:rounded-lg lg:border lg:border-white/15 lg:bg-white/10 lg:px-3.5 lg:py-2.5 lg:text-left lg:text-white lg:transition-colors lg:hover:border-white/30 lg:hover:bg-white/20 lg:focus-visible:outline-2 lg:focus-visible:outline-offset-2 lg:focus-visible:outline-white"
+    : "max-lg:min-h-12 max-lg:justify-start max-lg:rounded-xl max-lg:py-3 max-lg:text-base inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-md border border-[#17352a]/25 bg-white px-4 font-semibold text-[#17352a] transition-colors hover:border-[#17352a] hover:bg-[#f1f5ed] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#17352a]";
 
   const guestSignInClass =
-    "inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-lg border border-[#17352a] bg-[#17352a] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#244b3c] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#17352a] lg:min-w-28 lg:border-white/35 lg:bg-white/10 lg:px-6 lg:hover:border-white/60 lg:hover:bg-white/20 lg:focus-visible:outline-white";
+    "max-lg:min-h-12 max-lg:rounded-xl max-lg:py-3 max-lg:text-base inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-lg border border-[#17352a] bg-[#17352a] px-5 text-sm font-semibold text-white transition-colors hover:bg-[#244b3c] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#17352a] lg:min-w-28 lg:border-white/35 lg:bg-white/10 lg:px-6 lg:hover:border-white/60 lg:hover:bg-white/20 lg:focus-visible:outline-white";
   return (
     <>
       <div className={`max-lg:fixed max-lg:inset-x-0 max-lg:top-0 max-lg:z-50 max-lg:border-b max-lg:border-white/15 max-lg:bg-[#17352a] max-lg:shadow-md ${user ? "lg:contents" : "lg:sticky lg:top-0 lg:z-50 lg:mb-6 lg:border-b lg:border-white/15 lg:bg-[#17352a] lg:shadow-sm"}`}>
@@ -217,7 +217,7 @@ export default function Header() {
             menuOpen
               ? "max-lg:visible max-lg:translate-y-0 max-lg:opacity-100 max-lg:duration-200 max-lg:ease-out"
               : "max-lg:invisible max-lg:pointer-events-none max-lg:-translate-y-2 max-lg:opacity-0 max-lg:duration-150 max-lg:ease-in"
-          } flex flex-col items-start gap-4 text-sm max-lg:absolute max-lg:right-5 max-lg:top-[calc(100%-0.5rem)] max-lg:z-50 max-lg:max-h-[60dvh] max-lg:w-[calc(100%-2.5rem)] max-lg:max-w-72 max-lg:items-stretch max-lg:gap-2 max-lg:overflow-y-auto max-lg:rounded-xl max-lg:border max-lg:border-stone-200 max-lg:bg-white/90 max-lg:p-3 max-lg:shadow-lg max-lg:backdrop-blur-sm max-lg:transition-[opacity,translate,visibility] max-lg:motion-reduce:transition-none md:max-lg:right-8 ${
+          } flex flex-col items-start gap-4 text-sm max-lg:absolute max-lg:right-5 max-lg:top-[calc(100%-0.5rem)] max-lg:z-50 max-lg:max-h-[calc(100dvh-9rem)] max-lg:overscroll-contain max-lg:w-[calc(100%-2.5rem)] max-lg:max-w-72 max-lg:items-stretch max-lg:gap-2.5 max-lg:overflow-y-auto max-lg:rounded-2xl max-lg:border max-lg:border-stone-200 max-lg:bg-white/95 max-lg:p-3.5 max-lg:shadow-xl max-lg:backdrop-blur-sm max-lg:transition-[opacity,translate,visibility] max-lg:motion-reduce:transition-none md:max-lg:right-8 ${
             user
               ? "lg:fixed lg:top-20 lg:bottom-8 lg:left-3 lg:z-40 lg:flex lg:w-52 lg:gap-2 lg:overflow-y-auto lg:rounded-2xl lg:border lg:border-[#244b3c] lg:bg-[#17352a] lg:px-3 lg:py-5 lg:text-white lg:shadow-lg"
               : "lg:col-span-1 lg:col-start-2 lg:row-start-1 lg:flex lg:flex-row lg:items-center lg:justify-end lg:border-0 lg:pt-0"
@@ -361,7 +361,7 @@ export default function Header() {
                 disabled={signingOut}
                 className={`${sidebarButtonClass} cursor-pointer disabled:cursor-not-allowed disabled:opacity-50`}
               >
-                <span className="flex items-center justify-between gap-3">
+                <span className="flex w-full items-center justify-between gap-3">
                   <span>{signingOut ? "Signing out…" : "Sign out"}</span>
                   <svg
                     aria-hidden="true"
