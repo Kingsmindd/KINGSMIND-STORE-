@@ -18,7 +18,6 @@ import cors from "cors";
 import { createOrderDraftRouter } from "./routes/order-draft.routes.js";
 import { createSupportChatRouter } from "./routes/support-chat.routes.js";
 import { startSupportEmailWorker } from "./services/support-email-worker.js";
-import path from "node:path";
 
 const app = express();
 
@@ -150,25 +149,9 @@ if (!isProduction) {
 }
 
 if (isProduction) {
-  const frontendDirectory = path.resolve(__dirname, "../../client/dist");
-
-  app.use(
-    express.static(frontendDirectory, {
-      index: false,
-      maxAge: "1h",
-    }),
-  );
-
-  app.get("/{*page}", (req, res, next) => {
-    if (req.path.startsWith("/uploads/") || path.extname(req.path)) {
-      next();
-      return;
-    }
-
-    res.sendFile(path.join(frontendDirectory, "index.html"), {
-      headers: {
-        "Cache-Control": "no-store",
-      },
+  app.get("/", (_req, res) => {
+    res.json({
+      message: "KINGSMIND API is running.",
     });
   });
 }
