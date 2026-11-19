@@ -12,11 +12,15 @@ export default function Header() {
   const location = useLocation();
   const [searchOpen, setSearchOpen] = useState(false);
   const searchPanelRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const searchButtonRef = useRef<HTMLButtonElement>(null);
   const mobileSearchButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!searchOpen) return;
+    if (window.matchMedia("(min-width: 1024px)").matches) {
+      searchInputRef.current?.focus({ preventScroll: true });
+    }
     function closeOutside(event: PointerEvent) {
       const target = event.target;
       if (!(target instanceof Node)) return;
@@ -413,10 +417,10 @@ export default function Header() {
             <div className="flex items-center gap-2 rounded-full bg-[#f1f2eb] py-1 pr-1.5 pl-5 transition-colors focus-within:bg-[#e3e9d9]">
               <input
                 id="navbar-search-input"
+                ref={searchInputRef}
                 name="search"
                 type="search"
                 autoComplete="off"
-                autoFocus
                 defaultValue={new URLSearchParams(location.search).get("search") ?? ""}
                 onChange={(event) => {
                   const params = new URLSearchParams();
@@ -434,7 +438,7 @@ export default function Header() {
                 }}
                 maxLength={100}
                 placeholder="Football essentials"
-                className="min-h-12 min-w-0 flex-1 appearance-none rounded-full border-0 bg-transparent py-3 text-sm text-[#17352a] shadow-none outline-none placeholder:text-stone-500 focus-visible:outline-none sm:text-base"
+                className="min-h-12 min-w-0 flex-1 appearance-none rounded-full border-0 bg-transparent py-3 text-base text-[#17352a] shadow-none outline-none placeholder:text-stone-500 focus-visible:outline-none"
               />
               <button type="submit" className="min-h-11 shrink-0 cursor-pointer rounded-full bg-[#17352a] px-4 text-sm font-semibold text-white transition-colors hover:bg-[#244b3c] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#17352a] sm:px-5">
                 Search

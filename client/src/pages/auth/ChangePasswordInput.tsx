@@ -21,7 +21,8 @@ export default function ChangePasswordPage() {
     event.preventDefault();
     if (submitting) return;
     setSuccess("");
-    const fields = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const fields = new FormData(form);
     const currentPassword = String(fields.get("currentPassword") ?? "");
     const newPassword = String(fields.get("newPassword") ?? "");
     const confirmation = String(fields.get("confirmation") ?? "");
@@ -36,6 +37,7 @@ export default function ChangePasswordPage() {
 
     try {
       await changePassword({ currentPassword, newPassword });
+      form.reset();
       setSuccess("Password changed successfully.");
     } catch (error: unknown) {
       setError(
