@@ -9,9 +9,10 @@ export function useCart() {
     throw new Error("useCart must be used inside CartProvider.");
   }
 
-  const { state, dispatch } = context;
+  const { state, dispatch, ready } = context;
 
   return {
+    ready,
     items: state.items,
     notice: state.notice,
     itemCount: state.items.reduce((total, item) => total + item.quantity, 0),

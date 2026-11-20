@@ -16,6 +16,7 @@ export default function CartPage() {
     removeItem,
     clearCart,
     restoreCart,
+    ready,
   } = useCart();
   const clearDialogRef = useRef<HTMLDialogElement>(null);
 
@@ -162,6 +163,17 @@ export default function CartPage() {
       )}
     </div>
   );
+  if (!ready) {
+    return (
+      <section className="mx-auto max-w-7xl px-5 py-10 md:px-8">
+        <BackLink to="/#collection">Back to collection</BackLink>
+        <h1 className="text-3xl font-bold tracking-tight">Your cart</h1>
+        <p role="status" className="mt-6 rounded-2xl border border-stone-200 bg-white px-5 py-8 text-sm text-stone-600">
+          Loading your cart…
+        </p>
+      </section>
+    );
+  }
   if (items.length === 0) {
     return (
       <section className="mx-auto max-w-7xl px-5 py-20 md:px-8">

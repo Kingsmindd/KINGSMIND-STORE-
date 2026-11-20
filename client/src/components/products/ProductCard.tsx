@@ -11,7 +11,7 @@ type ProductCardProps = {
 };
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { addItem } = useCart();
+  const { addItem, ready } = useCart();
   const [adding, setAdding] = useState(false);
   const [error, setError] = useState("");
   const request = useRef<AbortController | null>(null);
@@ -25,7 +25,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   }, [error]);
 
   async function handleAdd() {
-    if (request.current || !product.in_stock) return;
+    if (!ready || request.current || !product.in_stock) return;
     const controller = new AbortController();
     request.current = controller;
     setAdding(true);
@@ -108,12 +108,12 @@ export default function ProductCard({ product }: ProductCardProps) {
     <div className="px-5 pb-5">
       <button
         type="button"
-        disabled={adding || !product.in_stock}
+        disabled={!ready || adding || !product.in_stock}
         aria-label={`Add ${product.name} to cart`}
         onClick={() => void handleAdd()}
         className="flex min-h-11 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#17352a] px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#244b3c] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#17352a] disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {adding ? "Adding…" : product.in_stock ? "Add to cart" : "Sold out"}
+        {adding ? "Adding…" : !product.in_stock ? "Sold out" : ready ? "Add to cart" : "Preparing cart…"}
       </button>
       {error && <p role="alert" className="mt-3 text-sm text-red-800">{error}</p>}
     </div>

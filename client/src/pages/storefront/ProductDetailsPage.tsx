@@ -11,7 +11,7 @@ export default function ProductDetailsPage() {
   const { productId = "" } = useParams();
   const { product, loading, error } = useProductDetails(productId);
   const [selectedId, setSelectedId] = useState("");
-  const { addItem, notice } = useCart();
+  const { addItem, notice, ready } = useCart();
 
   if (loading) {
     return (
@@ -88,9 +88,9 @@ export default function ProductDetailsPage() {
 
           <button
             type="button"
-            disabled={!selected?.in_stock}
+            disabled={!ready || !selected?.in_stock}
             onClick={() => {
-              if (!selected) return;
+              if (!ready || !selected) return;
 
               addItem({
                 productId: product.id,
@@ -109,7 +109,7 @@ export default function ProductDetailsPage() {
             }}
             className="mt-7 w-full cursor-pointer bg-[#17352a] px-6 py-4 font-semibold text-white transition-colors hover:bg-[#244d3d] disabled:cursor-not-allowed disabled:opacity-40"
           >
-            {selected?.in_stock ? "Add to cart" : "Sold out"}
+            {!selected?.in_stock ? "Sold out" : ready ? "Add to cart" : "Preparing cart…"}
           </button>
 
           <p role="status" className="mt-3 min-h-6 text-sm text-stone-600">

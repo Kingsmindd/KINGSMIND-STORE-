@@ -35,8 +35,9 @@ function isStoredCartItem(value: unknown): value is CartItem {
   );
 }
 
-function readSavedCart(storageKey: string): CartState {
+function readSavedCart(storageKey: string | null): CartState {
   const emptyCart: CartState = { items: [], notice: "" };
+  if (!storageKey) return emptyCart;
 
   try {
     const saved = localStorage.getItem(storageKey);
@@ -149,16 +150,46 @@ function cartReducer(state: CartState, action: CartAction): CartState {
   }
 }
 
+type AccountCartState = {
+  storageKey: string | null;
+  cart: CartState;
+};
+
+type AccountCartAction =
+  | { type: "switch"; storageKey: string | null; cart: CartState }
+  | { type: "cart"; storageKey: string | null; action: CartAction };
+
+function accountCartReducer(
+  state: AccountCartState,
+  action: AccountCartAction,
+): AccountCartState {
+  if (action.type === "switch") {
+    return { storageKey: action.storageKey, cart: action.cart };
+  }
+  if (!action.storageKey || action.storageKey !== state.storageKey) return state;
+  return { ...state, cart: cartReducer(state.cart, action.action) };
+}
+
 function AccountCart({
   children,
   storageKey,
 }: {
   children: ReactNode;
-  storageKey: string;
+  storageKey: string | null;
 }) {
-  const [state, dispatch] = useReducer(cartReducer, storageKey, readSavedCart);
+  const [account, dispatch] = useReducer(
+    accountCartReducer,
+    storageKey,
+    (key): AccountCartState => ({ storageKey: key, cart: readSavedCart(key) }),
+  );
+  const state = account.cart;
+
+  if (account.storageKey !== storageKey) {
+    dispatch({ type: "switch", storageKey, cart: readSavedCart(storageKey) });
+  }
 
   useEffect(() => {
+    if (!storageKey) return;
     try {
       if (state.items.length === 0) {
         localStorage.removeItem(storageKey);
@@ -174,14 +205,18 @@ function AccountCart({
     if (!state.notice) return;
 
     const timeoutId = window.setTimeout(() => {
-      dispatch({ type: "clear-notice" });
+      dispatch({ type: "cart", storageKey, action: { type: "clear-notice" } });
     }, 3000);
 
     return () => window.clearTimeout(timeoutId);
-  }, [state.notice, state.items]);
+  }, [state.notice, state.items, storageKey]);
 
   return (
-    <CartContext.Provider value={{ state, dispatch }}>
+    <CartContext.Provider value={{
+      state,
+      ready: storageKey !== null,
+      dispatch: (action) => dispatch({ type: "cart", storageKey, action }),
+    }}>
       {children}
     </CartContext.Provider>
   );
@@ -190,20 +225,14 @@ function AccountCart({
 export default function CartProvider({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
 
-  if (loading) {
-    return (
-      <p role="status" className="px-5 py-12 text-center text-stone-600">
-        Loading your session…
-      </p>
-    );
-  }
-
-  const storageKey = user
-    ? `kingsmind-cart-v2:user:${user.id}`
-    : "kingsmind-cart-v2:guest";
+  const storageKey = loading
+    ? null
+    : user
+      ? `kingsmind-cart-v2:user:${user.id}`
+      : "kingsmind-cart-v2:guest";
 
   return (
-    <AccountCart key={storageKey} storageKey={storageKey}>
+    <AccountCart storageKey={storageKey}>
       {children}
     </AccountCart>
   );

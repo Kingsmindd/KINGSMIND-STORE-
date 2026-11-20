@@ -27,6 +27,7 @@ export type CartAction =
   | { type: "restore"; items: CartItem[] };
 
 export const CartContext = createContext<{
+  ready: boolean;
   state: CartState;
   dispatch: Dispatch<CartAction>;
 } | null>(null);

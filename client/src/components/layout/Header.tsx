@@ -311,6 +311,7 @@ export default function Header() {
                 <circle cx="9" cy="20" r="1" />
                 <circle cx="18" cy="20" r="1" />
               </svg>
+              <span>Cart</span>
               {itemCount > 0 && (
                 <span
                   aria-hidden="true"
