@@ -127,7 +127,10 @@ export default function CustomerManagementPage() {
     <section className="mx-auto max-w-5xl px-5 py-12 md:px-8">
       <h1 className="text-4xl font-bold tracking-tight">Manage customers</h1>
       {actionFeedback && (
-        <ActionNotice message={actionFeedback.message} type={actionFeedback.isError ? "error" : "success"} />
+        <ActionNotice
+          message={actionFeedback.message}
+          type={actionFeedback.isError ? "error" : "success"}
+        />
       )}
 
       {error && (
