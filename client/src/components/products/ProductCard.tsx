@@ -1,3 +1,4 @@
+import { ActionNotice } from "../ui/AppNotifications";
 import { resolveImageUrl } from "../../config/api";
 import type { ProductSummary } from "../../types/product.types";
 import { formatMoney } from "../../utils/formatMoney";
@@ -115,7 +116,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       >
         {adding ? "Adding…" : !product.in_stock ? "Sold out" : ready ? "Add to cart" : "Preparing cart…"}
       </button>
-      {error && <p role="alert" className="mt-3 text-sm text-red-800">{error}</p>}
+      {error && <ActionNotice message={error} type={"error"} />}
     </div>
     </article>
   );

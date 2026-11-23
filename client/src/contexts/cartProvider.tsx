@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { useEffect, useReducer } from "react";
 import type { ReactNode } from "react";
 import { CartContext } from "./CartContext";
@@ -78,6 +79,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         return {
           ...state,
           notice: "Your cart can contain up to 50 different variants.",
+          noticeType: "error",
         };
       }
 
@@ -88,6 +90,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         return {
           ...state,
           notice: "The requested quantity exceeds the available amount.",
+          noticeType: "error",
         };
       }
 
@@ -100,6 +103,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
             )
           : [...state.items, updated],
         notice: `${item.name} added to your cart.`,
+        noticeType: "success",
       };
     }
 
@@ -118,6 +122,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         return {
           ...state,
           notice: "Choose a quantity within the available amount.",
+          noticeType: "error",
         };
       }
 
@@ -128,6 +133,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
             : entry,
         ),
         notice: "Cart quantity updated.",
+        noticeType: "success",
       };
     }
 
@@ -137,6 +143,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
           (entry) => entry.variantId !== action.variantId,
         ),
         notice: "Item removed from your cart.",
+        noticeType: "success",
       };
 
     case "clear-notice":
@@ -146,7 +153,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       return { items: action.items, notice: "" };
 
     case "clear":
-      return { items: [], notice: "Cart cleared." };
+      return { items: [], notice: action.silent ? "" : "Cart cleared.", noticeType: "success" };
   }
 }
 
@@ -203,13 +210,14 @@ function AccountCart({
 
   useEffect(() => {
     if (!state.notice) return;
+    toast[state.noticeType ?? "success"](state.notice, { id: "cart-feedback" });
 
     const timeoutId = window.setTimeout(() => {
       dispatch({ type: "cart", storageKey, action: { type: "clear-notice" } });
     }, 3000);
 
     return () => window.clearTimeout(timeoutId);
-  }, [state.notice, state.items, storageKey]);
+  }, [state, storageKey]);
 
   return (
     <CartContext.Provider value={{

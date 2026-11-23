@@ -1,3 +1,4 @@
+import { ActionNotice } from "../../components/ui/AppNotifications";
 import { useEffect, useState } from "react";
 import { resolveImageUrl } from "../../config/api";
 import { getAdminProducts } from "../../services/product.service";
@@ -60,12 +61,7 @@ export default function ProductsPage() {
   return (
     <section className="mx-auto max-w-6xl px-5 py-12 md:px-8">
       {showUpdatedNotice && (
-        <div
-          role="status"
-          className="fixed inset-x-4 top-14 z-50 rounded-lg border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-semibold text-emerald-900 shadow-md sm:right-6 sm:left-auto sm:w-72"
-        >
-          ✓ Product updated.
-        </div>
+        <ActionNotice message="Product updated." />
       )}
       <p className="text-xs font-bold tracking-widest text-[#688746]">
         KINGSMIND ADMIN

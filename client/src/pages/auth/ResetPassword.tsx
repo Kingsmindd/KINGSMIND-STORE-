@@ -1,3 +1,5 @@
+import { ActionNotice } from "../../components/ui/AppNotifications";
+import toast from "react-hot-toast";
 import { useState, type FormEvent } from "react";
 import { Link, useSearchParams } from "react-router";
 import PasswordInput from "../../components/ui/PasswordInput";
@@ -31,6 +33,7 @@ export default function ResetPasswordPage() {
     try {
       const result = await resetPassword(token, newPassword);
       setMessage(result.message);
+      toast.success(result.message, { id: "password-reset" });
       setSearchParams({}, { replace: true });
     } catch (error: unknown) {
       setError(
@@ -106,9 +109,7 @@ export default function ResetPasswordPage() {
           </fieldset>
 
           {error && (
-            <p role="alert" className="mt-4 text-sm text-red-800">
-              {error}
-            </p>
+            <ActionNotice message={error} type="error" />
           )}
         </form>
       )}

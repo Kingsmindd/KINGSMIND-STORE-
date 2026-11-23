@@ -1,3 +1,4 @@
+import { ActionNotice } from "../../components/ui/AppNotifications";
 import { useEffect, useState, type FormEvent } from "react";
 import { useSearchParams } from "react-router";
 import {
@@ -129,12 +130,7 @@ export default function GuestSupportEmail() {
       )}
 
       {feedback && (
-        <p
-          role={feedback.isError ? "alert" : "status"}
-          className={feedback.isError ? "mt-3 text-sm text-red-800" : "mt-3 text-sm text-emerald-800"}
-        >
-          {feedback.text}
-        </p>
+        <ActionNotice message={feedback.text} type={feedback.isError ? "error" : "success"} />
       )}
     </section>
   );

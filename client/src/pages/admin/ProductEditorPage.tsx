@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+import { ActionNotice } from "../../components/ui/AppNotifications";
 import BackLink from "../../components/ui/BackLink";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
@@ -127,6 +129,7 @@ export default function ProductEditorPage() {
         product.id,
         !product.is_active,
       );
+      toast.success(updated.is_active ? "Product published." : "Product hidden from the collection.", { id: "product-result" });
       if (updated.is_active) {
         navigate("/admin/products", { replace: true });
         return;
@@ -199,6 +202,7 @@ export default function ProductEditorPage() {
         variantId,
         amountMinor.toString(),
       );
+      toast.success("Product price updated.", { id: "product-result" });
 
       setResult((previous) => {
         if (
@@ -245,6 +249,7 @@ export default function ProductEditorPage() {
 
     try {
       await deleteAdminProduct(product.id);
+      toast.success("Product deleted.", { id: "product-result" });
       deleteDialogRef.current?.close();
       navigate("/admin/products", { replace: true });
     } catch (error: unknown) {
@@ -301,9 +306,7 @@ export default function ProductEditorPage() {
           </div>
 
           {visibilityError?.id === product.id && (
-            <p role="alert" className="mt-2 text-sm text-red-800">
-              {visibilityError.message}
-            </p>
+            <ActionNotice message={visibilityError.message} type={"error"} />
           )}
           <p className="mt-4 text-stone-600">
             {product.description || "No description yet."}
@@ -344,14 +347,7 @@ export default function ProductEditorPage() {
             </fieldset>
 
             {saveFeedback?.id === product.id && (
-              <p
-                role={saveFeedback.isError ? "alert" : "status"}
-                className={`mt-4 text-sm ${
-                  saveFeedback.isError ? "text-red-800" : "text-emerald-800"
-                }`}
-              >
-                {saveFeedback.message}
-              </p>
+              <ActionNotice message={saveFeedback.message} type={saveFeedback.isError ? "error" : "success"} />
             )}
             <section className="mt-8 border-t border-stone-200 pt-6">
               <h2 className="text-xl font-bold">Product picture</h2>
@@ -474,9 +470,7 @@ export default function ProductEditorPage() {
                         </button>
 
                         {priceError?.variantId === variant.id && (
-                          <p role="alert" className="text-red-800">
-                            {priceError.message}
-                          </p>
+                          <ActionNotice message={priceError.message} type={"error"} />
                         )}
                       </form>
                     </details>

@@ -1,3 +1,4 @@
+import { ActionNotice } from "../../components/ui/AppNotifications";
 import BackLink from "../../components/ui/BackLink";
 import { useState, type FormEvent, useEffect } from "react";
 import PasswordInput from "../../components/ui/PasswordInput";
@@ -110,15 +111,11 @@ export default function ChangePasswordPage() {
         </fieldset>
 
         {error && (
-          <p role="alert" className="mt-4 text-sm text-red-800">
-            {error}
-          </p>
+          <ActionNotice message={error} type={"error"} />
         )}
 
         {success && (
-          <p role="status" className="mt-4 text-sm text-emerald-800">
-            {success}
-          </p>
+          <ActionNotice message={success} type={"success"} />
         )}
       </form>
     </section>

@@ -4,12 +4,10 @@ import { Link, useSearchParams } from "react-router";
 import { resolveImageUrl } from "../../config/api";
 import { formatMoney } from "../../utils/formatMoney";
 import { useEffect, useMemo, useState } from "react";
-import { useCart } from "../../hooks/useCart";
 
 export default function HomePage() {
   const [searchParams] = useSearchParams();
   const search = searchParams.get("search") ?? "";
-  const { notice } = useCart();
   const { products, page, hasMore, loading, error, goToPage, retry } =
     useProducts(search);
 
@@ -50,13 +48,7 @@ export default function HomePage() {
   }, [slideCount, paused, largeScreen]);
   return (
     <>
-      <div role="status" aria-live="polite" aria-atomic="true">
-        {notice && (
-          <p className="fixed inset-x-4 top-14 z-50 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-sm font-semibold text-emerald-900 shadow-md sm:right-6 sm:left-auto sm:max-w-sm">
-            {notice}
-          </p>
-        )}
-      </div>
+
       <section
         aria-labelledby="hero-title"
         className="mx-4 overflow-hidden rounded-3xl bg-[#17352a] text-[#f6f5ef] md:mx-6"

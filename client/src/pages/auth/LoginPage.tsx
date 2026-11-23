@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+import { ActionNotice } from "../../components/ui/AppNotifications";
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link, Navigate, useLocation } from "react-router";
@@ -47,6 +49,7 @@ export default function LoginPage() {
 
     try {
       await login({ email: email.trim(), password });
+      toast.success("Signed in. Welcome back.", { id: "account-session" });
     } catch (error: unknown) {
       setError(
         error instanceof Error
@@ -78,20 +81,10 @@ export default function LoginPage() {
 
       <form onSubmit={handleSubmit} aria-busy={submitting}>
         {typeof passwordChanged === "string" && (
-          <p
-            role="status"
-            className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-900"
-          >
-            {passwordChanged}
-          </p>
+          <ActionNotice message={passwordChanged} type={"success"} />
         )}
         {(error || sessionError) && (
-          <p
-            role="alert"
-            className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800"
-          >
-            {error || sessionError}
-          </p>
+          <ActionNotice message={error || sessionError} type={"error"} />
         )}
 
         <fieldset disabled={submitting} className="space-y-5">

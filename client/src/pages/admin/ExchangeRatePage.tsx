@@ -1,3 +1,4 @@
+import { ActionNotice } from "../../components/ui/AppNotifications";
 import { useEffect, useState, type FormEvent } from "react";
 import {
   getExchangeRate,
@@ -101,20 +102,10 @@ export default function ExchangeRatePage() {
         </button>
 
         {message && (
-          <p
-            role="status"
-            className="rounded-lg bg-emerald-50 p-3 text-sm text-emerald-900"
-          >
-            {message}
-          </p>
+          <ActionNotice message={message} type={"success"} />
         )}
         {error && (
-          <p
-            role="alert"
-            className="rounded-lg bg-red-50 p-3 text-sm text-red-900"
-          >
-            {error}
-          </p>
+          <ActionNotice message={error} type={"error"} />
         )}
       </form>
     </section>

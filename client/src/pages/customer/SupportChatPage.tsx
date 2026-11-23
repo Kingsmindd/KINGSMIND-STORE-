@@ -1,3 +1,4 @@
+import { ActionNotice } from "../../components/ui/AppNotifications";
 import BackLink from "../../components/ui/BackLink";
 import {
   useCallback,
@@ -276,9 +277,7 @@ function SupportThread({
           className="w-full rounded-lg border border-stone-300 px-3 py-2"
         />
         {sendError && (
-          <p role="alert" className="text-sm text-red-800">
-            {sendError}
-          </p>
+          <ActionNotice message={sendError} type={"error"} />
         )}
         <button
           type="submit"

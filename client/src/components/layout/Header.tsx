@@ -1,3 +1,5 @@
+import { ActionNotice } from "../ui/AppNotifications";
+import toast from "react-hot-toast";
 import { Link, useNavigate, useLocation } from "react-router";
 import { useCart } from "../../hooks/useCart";
 import { useAuth } from "../../hooks/useAuth";
@@ -105,6 +107,7 @@ export default function Header() {
 
     try {
       await logout();
+      toast.success("Signed out successfully.", { id: "account-session" });
       navigate("/login", { replace: true });
     } catch {
       setLogoutError("Sign-out failed. Please try again.");
@@ -456,9 +459,7 @@ export default function Header() {
         </p>
       )}
       {logoutError && (
-        <p role="alert" className="px-5 pb-3 text-center text-sm text-red-700">
-          {logoutError}
-        </p>
+        <ActionNotice message={logoutError} type="error" />
       )}
     </>
   );

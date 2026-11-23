@@ -1,3 +1,4 @@
+import { ActionNotice } from "../../components/ui/AppNotifications";
 import BackLink from "../../components/ui/BackLink";
 import { useState, type FormEvent } from "react";
 import { requestPasswordReset } from "../../services/auth.service";
@@ -63,14 +64,10 @@ export default function ForgotPasswordPage() {
       </form>
 
       {message && (
-        <p role="status" className="mt-4 text-sm text-emerald-800">
-          {message}
-        </p>
+        <ActionNotice message={message} type={"success"} />
       )}
       {error && (
-        <p role="alert" className="mt-4 text-sm text-red-800">
-          {error}
-        </p>
+        <ActionNotice message={error} type={"error"} />
       )}
 
       <BackLink to="/login">Back to sign in</BackLink>

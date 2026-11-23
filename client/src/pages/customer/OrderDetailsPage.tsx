@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+import { ActionNotice } from "../../components/ui/AppNotifications";
 import BackLink from "../../components/ui/BackLink";
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router";
@@ -174,6 +176,7 @@ export default function OrderDetailsPage({
 
     try {
       await confirmOrder(order.id);
+      toast.success("Order confirmed.", { id: "order-action" });
 
       try {
         const updated = await getAdminOrder(order.id);
@@ -212,6 +215,7 @@ export default function OrderDetailsPage({
 
     try {
       await shipOrder(order.id);
+      toast.success("Order marked as shipped.", { id: "order-action" });
 
       try {
         const updated = await getAdminOrder(order.id);
@@ -243,6 +247,7 @@ export default function OrderDetailsPage({
     try {
       await completeOrderDelivery(order.id);
       deliveryDialogRef.current?.close();
+      toast.success("Delivery completed and payment recorded.", { id: "order-action" });
 
       try {
         const updated = await getAdminOrder(order.id);
@@ -281,6 +286,7 @@ export default function OrderDetailsPage({
 
     try {
       await cancelOrder(order.id, reason);
+      toast.success("Order cancelled.", { id: "order-action" });
 
       try {
         const updated = await getAdminOrder(order.id);
@@ -484,15 +490,11 @@ export default function OrderDetailsPage({
                   />
 
                   {quoteError && (
-                    <p role="alert" className="mt-3 text-sm text-red-800">
-                      {quoteError}
-                    </p>
+                    <ActionNotice message={quoteError} type={"error"} />
                   )}
 
                   {quoteMessage && (
-                    <p role="status" className="mt-3 text-sm text-emerald-800">
-                      {quoteMessage}
-                    </p>
+                    <ActionNotice message={quoteMessage} type={"success"} />
                   )}
 
                   <button
@@ -577,9 +579,7 @@ export default function OrderDetailsPage({
                     </p>
 
                     {confirmError && (
-                      <p role="alert" className="mt-3 text-sm text-red-800">
-                        {confirmError}
-                      </p>
+                      <ActionNotice message={confirmError} type={"error"} />
                     )}
 
                     <button
@@ -598,9 +598,7 @@ export default function OrderDetailsPage({
                 order.payment_status === "uncollected" && (
                   <div className="border-t border-stone-300 pt-5">
                     {shipError && (
-                      <p role="alert" className="mb-3 text-sm text-red-800">
-                        {shipError}
-                      </p>
+                      <ActionNotice message={shipError} type={"error"} />
                     )}
 
                     <button

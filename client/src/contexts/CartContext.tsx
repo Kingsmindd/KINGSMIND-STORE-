@@ -16,13 +16,14 @@ export type CartItem = {
 export type CartState = {
   items: CartItem[];
   notice: string;
+  noticeType?: "success" | "error";
 };
 
 export type CartAction =
   | { type: "add"; item: CartItem }
   | { type: "quantity"; variantId: string; quantity: number }
   | { type: "remove"; variantId: string }
-  | { type: "clear" }
+  | { type: "clear"; silent?: boolean }
   | { type: "clear-notice" }
   | { type: "restore"; items: CartItem[] };
 

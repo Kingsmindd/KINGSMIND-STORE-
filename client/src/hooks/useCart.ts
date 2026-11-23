@@ -20,7 +20,7 @@ export function useCart() {
     updateQuantity: (variantId: string, quantity: number) =>
       dispatch({ type: "quantity", variantId, quantity }),
     removeItem: (variantId: string) => dispatch({ type: "remove", variantId }),
-    clearCart: () => dispatch({ type: "clear" }),
+    clearCart: (silent = false) => dispatch({ type: "clear", silent }),
     restoreCart: (items: CartItem[]) => dispatch({ type: "restore", items }),
   };
 }

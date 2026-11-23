@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link, Navigate } from "react-router";
@@ -54,6 +55,7 @@ export default function RegisterPage() {
 
       setPassword("");
       setResult(response);
+      toast.success(response.verificationEmailSent ? "Account created. Check your email for verification." : "Account created. Request another verification email to continue.", { id: "registration-result" });
     } catch (error: unknown) {
       setError(
         error instanceof Error

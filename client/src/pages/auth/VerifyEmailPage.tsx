@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useLocation, useSearchParams } from "react-router";
@@ -70,6 +71,7 @@ export default function VerifyEmailPage() {
         if (!active) return;
         setVerified(true);
         setMessage(result.message);
+        toast.success(result.message, { id: "email-verification" });
         setError(
           result.refreshFailed
             ? "Email verified. Refresh the page to update your account status."
@@ -106,6 +108,7 @@ export default function VerifyEmailPage() {
     try {
       const result = await resendAccountVerification(email.trim());
       setMessage(result.message);
+      toast.success(result.message, { id: "email-verification" });
       setSearchParams({}, { replace: true });
     } catch (error: unknown) {
       setError(
@@ -161,7 +164,7 @@ export default function VerifyEmailPage() {
       </header>
       <div className="p-6 sm:p-8">
 
-      {message && (
+      {message && verified && (
         <p
           role="status"
           className="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm leading-6 text-emerald-900"

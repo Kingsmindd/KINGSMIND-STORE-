@@ -1,3 +1,4 @@
+import { ActionNotice } from "../../components/ui/AppNotifications";
 import { useEffect, useRef, useState } from "react";
 import {
   changeAdminCustomerStatus,
@@ -126,14 +127,7 @@ export default function CustomerManagementPage() {
     <section className="mx-auto max-w-5xl px-5 py-12 md:px-8">
       <h1 className="text-4xl font-bold tracking-tight">Manage customers</h1>
       {actionFeedback && (
-        <p
-          role={actionFeedback.isError ? "alert" : "status"}
-          className={`mt-4 text-sm ${
-            actionFeedback.isError ? "text-red-800" : "text-emerald-800"
-          }`}
-        >
-          {actionFeedback.message}
-        </p>
+        <ActionNotice message={actionFeedback.message} type={actionFeedback.isError ? "error" : "success"} />
       )}
 
       {error && (

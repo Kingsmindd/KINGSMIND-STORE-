@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+import { ActionNotice } from "../../components/ui/AppNotifications";
 import BackLink from "../../components/ui/BackLink";
 import { useEffect, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router";
@@ -87,6 +89,7 @@ export default function CreateProductPage() {
       }
 
       await setAdminProductVisibility(productId, true);
+      toast.success("Product created and published.", { id: "product-result" });
       navigate("/", { replace: true });
     } catch (error: unknown) {
       const message =
@@ -202,9 +205,7 @@ export default function CreateProductPage() {
         </div>
 
         {createError && (
-          <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800">
-            {createError}
-          </p>
+          <ActionNotice message={createError} type={"error"} />
         )}
 
         <div className="flex justify-end border-t border-stone-200 pt-5">

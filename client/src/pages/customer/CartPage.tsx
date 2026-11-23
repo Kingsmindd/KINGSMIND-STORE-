@@ -1,3 +1,4 @@
+import { ActionNotice } from "../../components/ui/AppNotifications";
 import BackLink from "../../components/ui/BackLink";
 import { Link } from "react-router";
 import { useCart } from "../../hooks/useCart";
@@ -11,7 +12,6 @@ export default function CartPage() {
   const {
     items,
     itemCount,
-    notice,
     updateQuantity,
     removeItem,
     clearCart,
@@ -150,16 +150,7 @@ export default function CartPage() {
       )}
 
       {feedback && (
-        <p
-          role={feedback.isError ? "alert" : "status"}
-          className={
-            feedback.isError
-              ? "w-full text-sm text-red-800"
-              : "w-full text-sm text-emerald-800"
-          }
-        >
-          {feedback.text}
-        </p>
+        <ActionNotice message={feedback.text} type={feedback.isError ? "error" : "success"} />
       )}
     </div>
   );
@@ -184,7 +175,7 @@ export default function CartPage() {
         </h1>
 
         <p role="status" className="mt-5 text-stone-600">
-          {notice || "Find something for your next game."}
+          Find something for your next game.
         </p>
 
         {savedCartControls}
@@ -227,9 +218,7 @@ export default function CartPage() {
         </button>
       </div>
 
-      <p role="status" className={notice ? "mt-4 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900" : "sr-only"}>
-        {notice}
-      </p>
+
 
         <div className="mt-7 grid items-start gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:gap-8">
           <div className="space-y-4">

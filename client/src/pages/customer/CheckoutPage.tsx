@@ -1,3 +1,5 @@
+import { ActionNotice } from "../../components/ui/AppNotifications";
+import toast from "react-hot-toast";
 import BackLink from "../../components/ui/BackLink";
 import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
@@ -248,7 +250,8 @@ export default function CheckoutPage() {
       });
 
       setOrder(created);
-      clearCart();
+      clearCart(true);
+      toast.success("Order placed. Awaiting your delivery quote.", { id: "checkout-result" });
     } catch (error: unknown) {
       if (error instanceof ApiError && error.status === 409) {
         setPreview(null);
@@ -282,12 +285,7 @@ export default function CheckoutPage() {
           <div className="p-5 sm:p-6">
 
           {error && (
-            <p
-              role="alert"
-              className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-800"
-            >
-              {error}
-            </p>
+            <ActionNotice message={error} type="error" />
           )}
 
           <fieldset disabled={submitting} className="grid gap-5 sm:grid-cols-2">

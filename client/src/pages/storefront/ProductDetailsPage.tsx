@@ -11,7 +11,8 @@ export default function ProductDetailsPage() {
   const { productId = "" } = useParams();
   const { product, loading, error } = useProductDetails(productId);
   const [selectedId, setSelectedId] = useState("");
-  const { addItem, notice, ready } = useCart();
+  const { addItem,
+    ready } = useCart();
 
   if (loading) {
     return (
@@ -112,9 +113,7 @@ export default function ProductDetailsPage() {
             {!selected?.in_stock ? "Sold out" : ready ? "Add to cart" : "Preparing cart…"}
           </button>
 
-          <p role="status" className="mt-3 min-h-6 text-sm text-stone-600">
-            {notice}
-          </p>
+
 
           <div className="mt-8 border-t border-[#d9ded4] pt-6 text-sm leading-7 text-stone-600">
             <p>Payment on delivery.</p>
